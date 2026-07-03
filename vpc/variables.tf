@@ -1,6 +1,7 @@
 variable "name" {
   description = "Name prefix for the VPC and related resources"
   type        = string
+  default    = "my-vpc"
 }
 
 variable "cidr_block" {

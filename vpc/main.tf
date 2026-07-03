@@ -96,6 +96,10 @@ resource "aws_eip" "nat" {
   tags = merge(var.tags, {
     Name = "${var.name}-nat-eip"
   })
+
+  lifecycle {
+    create_before_destroy = true
+  }
 }
 
 resource "aws_nat_gateway" "this" {
