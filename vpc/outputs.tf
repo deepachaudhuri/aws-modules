@@ -32,3 +32,13 @@ output "nat_gateway_id" {
   description = "ID of the NAT gateway"
   value       = length(aws_nat_gateway.this) > 0 ? aws_nat_gateway.this[0].id : null
 }
+
+output "private_subnet_ids" {
+  description = "List of private subnet IDs"
+  value       = [for name in local.private_subnet_names : aws_subnet.this[name].id]
+}
+
+output "public_subnet_ids" {
+  description = "List of public subnet IDs"
+  value       = [for name in local.public_subnet_names : aws_subnet.this[name].id]
+}
