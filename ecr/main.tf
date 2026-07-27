@@ -61,9 +61,11 @@ locals {
 resource "aws_ecr_repository" "this" {
   for_each = { for repo in var.repositories : repo.name => repo }
 
-  repository_name                  = each.value.name
-  image_tag_mutability             = each.value.image_tag_mutability
-  scan_on_push                     = each.value.scan_on_push
+  name                     = each.value.name
+  image_tag_mutability     = each.value.image_tag_mutability
+  image_scanning_configuration {
+    scan_on_push = each.value.scan_on_push
+  }
   encryption_configuration {
     encryption_type = each.value.encryption_type
     kms_key         = each.value.kms_key
@@ -98,8 +100,7 @@ resource "aws_ecr_repository_policy" "this" {
 resource "aws_ecr_pull_through_cache_rule" "this" {
   for_each = { for rule in var.pull_through_cache_rules : rule.ecr_repository_prefix => rule }
 
-  ecr_repository_prefix             = each.value.ecr_repository_prefix
-  upstream_registry_url             = each.value.upstream_registry_url
-  credential_arn                    = each.value.credential_arn
-  upstream_registry                 = each.value.upstream_registry
+  ecr_repository_prefix = each.value.ecr_repository_prefix
+  upstream_registry_url = each.value.upstream_registry_url
+  credential_arn        = each.value.credential_arn
 }
