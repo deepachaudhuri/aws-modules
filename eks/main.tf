@@ -166,7 +166,7 @@ resource "aws_eks_addon" "aws_load_balancer_controller" {
   count            = var.enable_aws_load_balancer_controller ? 1 : 0
   cluster_name     = aws_eks_cluster.this.name
   addon_name       = "aws-load-balancer-controller"
-  addon_version    = var.aws_load_balancer_controller_version
+  addon_version    = var.aws_load_balancer_controller_version != "" ? var.aws_load_balancer_controller_version : null
   service_account_role_arn = aws_iam_role.aws_load_balancer_controller[0].arn
 
   tags = var.tags
@@ -239,7 +239,7 @@ resource "aws_eks_addon" "ebs_csi_driver" {
   count            = var.enable_ebs_csi_driver ? 1 : 0
   cluster_name     = aws_eks_cluster.this.name
   addon_name       = "aws-ebs-csi-driver"
-  addon_version    = var.ebs_csi_driver_version
+  addon_version    = var.ebs_csi_driver_version != "" ? var.ebs_csi_driver_version : null
   service_account_role_arn = aws_iam_role.ebs_csi_driver[0].arn
 
   tags = var.tags
@@ -282,7 +282,7 @@ resource "aws_eks_addon" "efs_csi_driver" {
   count            = var.enable_efs_csi_driver ? 1 : 0
   cluster_name     = aws_eks_cluster.this.name
   addon_name       = "aws-efs-csi-driver"
-  addon_version    = var.efs_csi_driver_version
+  addon_version    = var.efs_csi_driver_version != "" ? var.efs_csi_driver_version : null
   service_account_role_arn = aws_iam_role.efs_csi_driver[0].arn
 
   tags = var.tags
@@ -325,7 +325,7 @@ resource "aws_eks_addon" "cloudwatch_observability" {
   count            = var.enable_cloudwatch_observability ? 1 : 0
   cluster_name     = aws_eks_cluster.this.name
   addon_name       = "amazon-cloudwatch-observability"
-  addon_version    = var.cloudwatch_observability_version
+  addon_version    = var.cloudwatch_observability_version != "" ? var.cloudwatch_observability_version : null
   service_account_role_arn = aws_iam_role.cloudwatch_observability[0].arn
 
   tags = var.tags

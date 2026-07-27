@@ -83,7 +83,7 @@ variable "enable_aws_load_balancer_controller" {
 variable "aws_load_balancer_controller_version" {
   description = "Version of the AWS Load Balancer Controller add-on"
   type        = string
-  default     = "v2.8.2"
+  default     = ""  # Use empty string to let AWS select the recommended version for the cluster
 }
 
 variable "enable_ebs_csi_driver" {
@@ -95,7 +95,7 @@ variable "enable_ebs_csi_driver" {
 variable "ebs_csi_driver_version" {
   description = "Version of the EBS CSI Driver add-on"
   type        = string
-  default     = "v1.28.0-eksbuild.1"
+  default     = ""  # Use empty string to let AWS select the recommended version for the cluster
 }
 
 variable "enable_efs_csi_driver" {
@@ -107,7 +107,7 @@ variable "enable_efs_csi_driver" {
 variable "efs_csi_driver_version" {
   description = "Version of the EFS CSI Driver add-on"
   type        = string
-  default     = "v2.0.0-eksbuild.1"
+  default     = ""  # Use empty string to let AWS select the recommended version for the cluster
 }
 
 variable "enable_cloudwatch_observability" {
@@ -119,7 +119,7 @@ variable "enable_cloudwatch_observability" {
 variable "cloudwatch_observability_version" {
   description = "Version of the CloudWatch Observability add-on"
   type        = string
-  default     = "v1.2.0-eksbuild.1"
+  default     = ""  # Use empty string to let AWS select the recommended version for the cluster
 }
 
 variable "tags" {
