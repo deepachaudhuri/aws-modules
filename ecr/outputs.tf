@@ -1,6 +1,6 @@
 output "repository_names" {
   description = "Names of the ECR repositories"
-  value       = { for key, repo in aws_ecr_repository.this : key => repo.repository_name }
+  value       = { for key, repo in aws_ecr_repository.this : key => repo.name }
 }
 
 output "repository_arns" {
