@@ -2,9 +2,51 @@
 
 This guide will help you deploy a sample Apache HTTPD web server application to your EKS cluster to verify it's working properly.
 
-## Installation & Setup Guide
+## Table of Contents
 
-### Step 1: Install kubectl
+- [Quick Start](#quick-start)
+- [Installation & Setup Guide](#installation--setup-guide)
+  - [Step 1: Install kubectl](#step-1-install-kubectl)
+  - [Step 2: Install AWS CLI](#step-2-install-aws-cli)
+  - [Step 3: Configure AWS Credentials](#step-3-configure-aws-credentials)
+  - [Step 4: Configure kubectl for EKS](#step-4-configure-kubectl-for-eks)
+  - [Step 5: Verify Cluster Connection](#step-5-verify-cluster-connection)
+  - [Step 6: Verify Connectivity to Private Subnets](#step-6-verify-connectivity-to-private-subnets)
+  - [Step 7: Troubleshooting Installation](#step-7-troubleshooting-installation)
+- [Prerequisites](#prerequisites)
+- [Deployment Steps](#deployment-steps)
+- [Manifest Overview](#manifest-overview)
+- [Testing the Deployment](#testing-the-deployment)
+- [Cleanup](#cleanup)
+- [Troubleshooting](#troubleshooting)
+- [Next Steps](#next-steps)
+- [Resources](#resources)
+
+---
+
+## Quick Start
+
+If you already have kubectl and AWS credentials configured:
+
+```bash
+# 1. Navigate to this directory
+cd samples/httpd-deployment
+
+# 2. Deploy the application
+kubectl apply -f deployment.yaml
+
+# 3. Port forward to access locally
+kubectl port-forward svc/httpd-service 8080:80
+
+# 4. Open browser
+# Visit: http://localhost:8080
+```
+
+If you need to set up kubectl and AWS credentials first, see [Installation & Setup Guide](#installation--setup-guide) below.
+
+---
+
+## Installation & Setup Guide
 
 kubectl is the command-line tool for interacting with Kubernetes clusters. Follow the instructions for your operating system:
 
