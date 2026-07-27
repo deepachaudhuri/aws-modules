@@ -1,0 +1,157 @@
+---
+# ConfigMap for custom HTML content
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: httpd-config
+  labels:
+    app: httpd
+data:
+  index.html: |
+    <!DOCTYPE html>
+    <html>
+    <head>
+      <title>Welcome to EKS</title>
+      <style>
+        body {
+          font-family: Arial, sans-serif;
+          margin: 40px;
+          background-color: #f0f0f0;
+        }
+        .container {
+          background-color: white;
+          padding: 30px;
+          border-radius: 8px;
+          box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+          max-width: 600px;
+          margin: 0 auto;
+        }
+        h1 {
+          color: #232f3e;
+          border-bottom: 3px solid #ff9900;
+          padding-bottom: 10px;
+        }
+        .info {
+          background-color: #f9f9f9;
+          padding: 15px;
+          border-left: 4px solid #ff9900;
+          margin: 20px 0;
+        }
+        .success {
+          color: #28a745;
+          font-weight: bold;
+        }
+      </style>
+    </head>
+    <body>
+      <div class="container">
+        <h1>🎉 Welcome to EKS!</h1>
+        <p>Your Kubernetes cluster is working correctly!</p>
+        
+        <div class="info">
+          <h2>Deployment Information</h2>
+          <p><strong>Cluster:</strong> lwplabs-cluster</p>
+          <p><strong>Kubernetes Version:</strong> 1.34</p>
+          <p><strong>Application:</strong> Apache HTTP Server (HTTPD)</p>
+          <p><strong>Hostname:</strong> ${HOSTNAME}</p>
+        </div>
+        
+        <div class="info">
+          <h2><span class="success">✓ Verification Checklist</span></h2>
+          <ul>
+            <li>✓ EKS cluster is running</li>
+            <li>✓ Kubernetes nodes are healthy</li>
+            <li>✓ Container pods are deployed and running</li>
+            <li>✓ Service is routing traffic correctly</li>
+            <li>✓ Networking is configured properly</li>
+          </ul>
+        </div>
+        
+        <div class="info">
+          <h2>Next Steps</h2>
+          <p>Your EKS cluster is ready! You can now:</p>
+          <ul>
+            <li>Deploy your own applications</li>
+            <li>Configure persistent storage</li>
+            <li>Set up monitoring and logging</li>
+            <li>Implement CI/CD pipelines</li>
+          </ul>
+        </div>
+      </div>
+    </body>
+    </html>
+
+---
+# Deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: httpd
+  labels:
+    app: httpd
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: httpd
+  template:
+    metadata:
+      labels:
+        app: httpd
+      annotations:
+        description: "Apache HTTPD sample application for EKS testing"
+    spec:
+      containers:
+      - name: httpd
+        image: httpd:2.4-alpine
+        ports:
+        - containerPort: 80
+          name: http
+        resources:
+          requests:
+            memory: "64Mi"
+            cpu: "100m"
+          limits:
+            memory: "128Mi"
+            cpu: "200m"
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 80
+          initialDelaySeconds: 10
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 3
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 80
+          initialDelaySeconds: 5
+          periodSeconds: 5
+          timeoutSeconds: 3
+        volumeMounts:
+        - name: html-config
+          mountPath: /usr/local/apache2/htdocs/
+          readOnly: true
+      volumes:
+      - name: html-config
+        configMap:
+          name: httpd-config
+
+---
+# Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: httpd-service
+  labels:
+    app: httpd
+spec:
+  type: ClusterIP
+  selector:
+    app: httpd
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 80
+    name: http
