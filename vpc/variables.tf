@@ -40,7 +40,7 @@ variable "create_internet_gateway" {
 variable "enable_nat_gateway" {
   description = "Create a NAT gateway for private subnets"
   type        = bool
-  default     = false
+  default     = true
 }
 
 variable "nat_gateway_subnet_name" {
